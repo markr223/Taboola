@@ -44,10 +44,3 @@ npm test
 - Comprehensive inline code comments for better understanding and maintainability.
 - Detailed README file with setup instructions and usage guidelines (to be added).
 
-## 🔜 Future Enhancements
-
-- Performance optimization for faster loading times.
-- Additional customization options for widget appearance.
-- Enhanced analytics integration for better tracking and reporting.
-
-
