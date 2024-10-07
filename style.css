@@ -18,7 +18,7 @@ body {
 }
 
 .recommendation {
-    position: relative; 
+    position: relative; /* to be block for absolute */
     width: 30%;
     margin: 10px;
     border-radius: 10px;
