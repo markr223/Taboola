@@ -31,7 +31,6 @@ export default class Adwidget {
         .catch(error => {
             if (retryCount > 0) {
                 console.warn(`Call failed trying again: ${retryCount}`);
-                retryCount--;
                 return this.fetchRecommendations(retryCount - 1);
             } else {
                 console.error('Error fetching recommendations:', error);
@@ -39,7 +38,7 @@ export default class Adwidget {
             }
         });
     }
-
+    // create a recommendation video element to be displayed as part of the widget
     createRecommendationVideoElement(element, recommendation) {
         const video = document.createElement('video');
             video.src = recommendation.thumbnail[0].url;
@@ -50,7 +49,7 @@ export default class Adwidget {
             video.muted = true;
             element.appendChild(video);
     }
-
+    // create a recommendation image element to be displayed as part of the widget
     createRecommendationImageElement(element, recommendation) {
         const imgSrc = recommendation.thumbnail[0].url;
         const fallbackSrc = './assets/images.png'; // Fallback image in case the image is not available
@@ -80,7 +79,6 @@ export default class Adwidget {
         element.addEventListener('click', () => this.handleClick(recommendation));
         return element;
     }
-
     // Handle click on a recommendation
     handleClick(recommendation) {
         if (recommendation.origin === 'sponsored') {
@@ -89,12 +87,10 @@ export default class Adwidget {
             window.location.href = recommendation.url;
         }
     }
-
     // render the widget by loading more recommendations (using async to be able to use await in the render method)
     async render() {
         await this.loadMore();
     }
-
     // Handle the intersection of the last recommendation with the viewport
     handleIntersect(entries) {
         entries.forEach(entry => {
@@ -106,7 +102,6 @@ export default class Adwidget {
             }
         });
     }
-
     loadMore() {
         // if loading is already in progress, return
         if (this.loading) return;
