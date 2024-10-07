@@ -47,7 +47,7 @@ class Adwidget {
 
     createRecommendationImageElement(element, recommendation) {
         const imgSrc = recommendation.thumbnail[0].url;
-        const fallbackSrc = 'images.png'; // Fallback image in case the image is not available
+        const fallbackSrc = './assets/images.png'; // Fallback image in case the image is not available
         const img = document.createElement('img');
         img.src = imgSrc;
         img.addEventListener('error', function() { // Handle image loading error when the image is not available

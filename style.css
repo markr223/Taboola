@@ -73,14 +73,24 @@ body {
 .loading-indicator {
     display: none;
     text-align: center;
-    padding: 20px;
-    font-size: 18px;
-    color: #666;
+    padding: 40px;
+    font-size: 16px;
+    color: gray;
     width: 100%;
+    animation: bounce 1s infinite;
 }
 
 .loading .loading-indicator {
     display: block;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 @media (max-width: 768px) {

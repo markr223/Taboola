@@ -1,0 +1,26 @@
+{
+  "name": "taboola",
+  "version": "1.0.0",
+  "description": "Taboola Task - Mark Rabinovich",
+  "main": "adWidget.js",
+  "scripts": {
+    "start": "live-server",
+    "test": "jest"
+  },
+  "author": "Mark Rabinovich",
+  "license": "ISC",
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "babel": {
+  "presets": ["@babel/preset-env"]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.7",
+    "@babel/preset-env": "^7.25.7",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "live-server": "^1.2.2"
+  }
+}
