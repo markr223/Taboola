@@ -1,15 +1,10 @@
 export default class Adwidget {
-    constructor() {
+    constructor(appKey, appName, recCount = 6, apptype='desktop', sourcePlacement='any') {
         this.widgetContainer = document.getElementById('widget-container');
         const url = 'https://api.taboola.com/1.2/json/feed/recommendations.get?'
-        const appKey = '143ca6bf153893c690249736df6a383615bb9e92';
-        const appName = 'msn-casualgames-sudoku-us';
-        const apptype = 'desktop';
-        const recCount = 6;
         const sourceType = 'text';
         const sourceId = 'https://www.microsoft.com/en-us/p/microsoft-sudoku/9wzdncrfhv60';
         const sourceUrl = 'https://www.microsoft.com/en-us/p/microsoft-sudoku/9wzdncrfhv60g';
-        const sourcePlacement = 'Any';
         const userSession = 'init';
         this.apiUrl = `${url}&app.type=${apptype}&app.apikey=${appKey}&app.name=${appName}&rec.count=${recCount}&source.type=${sourceType}&source.id=${sourceId}&source.url=${sourceUrl}&source.placement=${sourcePlacement}&user.session=${userSession}`;
         this.loading = false;
@@ -61,7 +56,7 @@ export default class Adwidget {
         });
         element.appendChild(img); // Add the image to the recommendation element
     }
-    // Create a recommendation element to be displayed as part of the widget
+    // Create a recommendation element to be displayed
     createRecommendationElement(recommendation) {
         const element = document.createElement('div');
         element.className = 'recommendation';
@@ -69,11 +64,33 @@ export default class Adwidget {
 
         const contentDiv = document.createElement('div'); // Create the content of the recommendation
         contentDiv.className = 'recommendation-content';
-        contentDiv.innerHTML = `
-            <div class="recommendation-title">${recommendation.name}</div>
-            ${recommendation.branding ? `<div class="recommendation-source">${recommendation.branding}</div>` : ''}
-            ${recommendation.origin === 'sponsored' ? '<span class="sponsored-tag">sponsored</span>' : ''}
-        `;
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'recommendation-title';
+        titleDiv.textContent = recommendation.name;
+        contentDiv.appendChild(titleDiv);
+        if (recommendation.branding) {
+            const sourceDiv = document.createElement('div');
+            sourceDiv.className = 'recommendation-source';
+            sourceDiv.textContent = recommendation.branding;
+            contentDiv.appendChild(sourceDiv);
+        }
+        if (recommendation.origin === 'sponsored') {
+            const sponsoredContainer = document.createElement('div');
+            sponsoredContainer.className = 'sponsored-container';
+            const sponsoredSpan = document.createElement('span');
+            sponsoredSpan.className = 'sponsored-tag';
+            sponsoredSpan.textContent = 'sponsored';
+            sponsoredContainer.appendChild(sponsoredSpan);
+            contentDiv.appendChild(sponsoredContainer);
+        }
+        const adTag = document.createElement('div');
+        adTag.className = 'ad-tag-container';
+        const adTagSpan = document.createElement('span');
+        adTagSpan.className = 'ad-tag';
+        adTagSpan.textContent = 'Ad';
+        adTag.appendChild(adTagSpan);
+        contentDiv.appendChild(adTag);
+
 
         element.appendChild(contentDiv); // Add the content to the recommendation element
         element.addEventListener('click', () => this.handleClick(recommendation));

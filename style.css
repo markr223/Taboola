@@ -18,6 +18,7 @@ body {
 }
 
 .recommendation {
+    position: relative; 
     width: 30%;
     margin: 10px;
     border-radius: 10px;
@@ -45,6 +46,7 @@ body {
 
 .recommendation-content {
     padding: 15px;
+    margin-bottom: 30px;
 }
 
 .recommendation-title {
@@ -52,22 +54,49 @@ body {
     margin-bottom: 8px;
     font-size: 16px;
     color: #333;
-    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    display: -moz-box; /* For Firefox */
+    -webkit-line-clamp: 2;
+    line-clamp: 2; /* For Firefox */
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical; /* For Firefox */
+    text-overflow: ellipsis;
 }
 
 .recommendation-source {
-    font-size: 14px;
+    font-size: 12px;
     color: #666;
+}
+.ad-tag-container {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.ad-tag {
+    background-color: white;
+    border: #333 2px solid;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0.6;
+    padding: 2px;
+}
+
+.sponsored-container {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
 }
 
 .sponsored-tag {
-    display: inline-block;
-    background-color: #f0f0f0;
+    background-color: #F0F0F0;
     color: #666;
-    padding: 3px 8px;
-    border-radius: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
     font-size: 12px;
     margin-top: 10px;
+    text-align: center;
 }
 
 .loading-indicator {
