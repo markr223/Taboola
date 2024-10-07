@@ -1,4 +1,4 @@
-class Adwidget {
+export default class Adwidget {
     constructor() {
         this.widgetContainer = document.getElementById('widget-container');
         const url = 'https://api.taboola.com/1.2/json/feed/recommendations.get?'
@@ -24,13 +24,19 @@ class Adwidget {
     }
 
     // Fetch recommendations from the API and return the list of recommendations
-    fetchRecommendations() {
+    fetchRecommendations(retryCount = 2) {
         return fetch(this.apiUrl)
         .then(response => response.json())
         .then(data => data.list)
         .catch(error => {
-            console.error('Error fetching recommendations:', error);
-            return [];
+            if (retryCount > 0) {
+                console.warn(`Call failed trying again: ${retryCount}`);
+                retryCount--;
+                return this.fetchRecommendations(retryCount - 1);
+            } else {
+                console.error('Error fetching recommendations:', error);
+                return [];
+            }
         });
     }
 
@@ -119,7 +125,6 @@ class Adwidget {
             // hide the loading indicator and change the loading state
             loadingIndicator.style.display = 'none';
             this.loading = false;
-            console.log('this.widgetContainer.children', this.widgetContainer.children);
             const lastElement = this.widgetContainer.children[this.widgetContainer.children.length - 2]; 
             // -2 Beacuse we want to get the last recommendtion and not the loading indicator
             
@@ -134,6 +139,3 @@ class Adwidget {
         });
     }
 }
-
-const widget = new Adwidget();
-widget.render();

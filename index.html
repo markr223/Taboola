@@ -9,6 +9,15 @@
     <div id="widget-container" class="widget-container">
         <div class="loading-indicator">Loading more recommendations...</div>
     </div>
-    <script src="adWidget.js"></script>
+    <script type="module" src="Adwidget.js"></script>
+    <script type="module">
+    // Mocking the Adwidget import as 3 party
+    import Adwidget from './Adwidget.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const widget = new Adwidget();
+        widget.render();
+    });
+    </script>
 </body>
 </html>
