@@ -15,12 +15,9 @@ npm start
 5. To run tests: 
 npm test
 
-## 🎉 New Features
+##  FOR Production
 
-- **Advanced Ad Widget**: Introduced a new, customizable ad widget for seamless integration of Taboola recommendations.
-- **Responsive Design**: Fully responsive layout adapting to various screen sizes and devices.
-- **Infinite Scroll**: Implemented an infinite scroll feature for continuous content loading.
-- **Sponsored Content Tagging**: Clear labeling of sponsored content for transparency.
+- **Build**: Run `npm run build` to create a production-ready build.
 
 ## 🛠 Technical Improvements
 
