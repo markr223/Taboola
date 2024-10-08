@@ -7,13 +7,10 @@
 </head>
 <body>
     <div id="widget-container" class="widget-container">
-        <div class="loading-indicator">Loading more recommendations...</div>
+        <div class="loading-indicator">Loading more Ads...</div>
     </div>
-    <script type="module" src="Adwidget.js"></script>
     <script type="module">
-    // Mocking the Adwidget import as 3 party
-    import Adwidget from './Adwidget.js';
-
+    import Adwidget from './adWidget.js';
     document.addEventListener('DOMContentLoaded', function() {
         const widget = new Adwidget('143ca6bf153893c690249736df6a383615bb9e92', 'msn-casualgames-sudoku-us', 6);
         widget.render();

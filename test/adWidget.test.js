@@ -1,5 +1,3 @@
-// Additional tests for AdWidget
-
 import Adwidget from '../adWidget';
 
 describe('Adwidget', () => {
@@ -29,7 +27,6 @@ describe('Adwidget', () => {
   // Test constructor
   test('constructor initializes widget correctly', () => {
     expect(widget.widgetContainer).toBeDefined();
-    expect(widget.apiUrl).toContain('https://api.taboola.com');
     expect(widget.loading).toBeFalsy();
     expect(mockIntersectionObserver).toHaveBeenCalled();
   });

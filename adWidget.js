@@ -1,13 +1,13 @@
 export default class Adwidget {
     constructor(appKey, appName, recCount = 6, apptype='desktop', sourcePlacement='any') {
         this.widgetContainer = document.getElementById('widget-container');
-        const url = 'https://api.taboola.com/1.2/json/feed/recommendations.get?'
-        const sourceType = 'text';
-        const sourceId = 'https://www.microsoft.com/en-us/p/microsoft-sudoku/9wzdncrfhv60';
-        const sourceUrl = 'https://www.microsoft.com/en-us/p/microsoft-sudoku/9wzdncrfhv60g';
-        const userSession = 'init';
-        this.apiUrl = `${url}&app.type=${apptype}&app.apikey=${appKey}&app.name=${appName}&rec.count=${recCount}&source.type=${sourceType}&source.id=${sourceId}&source.url=${sourceUrl}&source.placement=${sourcePlacement}&user.session=${userSession}`;
+        this.recCount = recCount;
+        this.appKey = appKey;
+        this.appName = appName;
+        this.apptype = apptype;
+        this.sourcePlacement = sourcePlacement;
         this.loading = false;
+        this.spaicelTags = ['sponsored'];
 
         /* using Observer to detect when the last recommendation is in view
         https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API 
@@ -18,15 +18,25 @@ export default class Adwidget {
         this.observer = new IntersectionObserver(this.handleIntersect.bind(this), { threshold: 1 });
     }
 
+    generateApiUrl(recCount = 6) {
+        const url = 'https://api.taboola.com/1.2/json/feed/recommendations.get?'
+        const sourceType = 'text';
+        const sourceId = 'https://www.microsoft.com/en-us/p/microsoft-sudoku/9wzdncrfhv60';
+        const sourceUrl = 'https://www.microsoft.com/en-us/p/microsoft-sudoku/9wzdncrfhv60g';
+        const userSession = 'init';
+        return `${url}&app.type=${this.apptype}&app.apikey=${this.appKey}&app.name=${this.appName}&rec.count=${recCount}&source.type=${sourceType}&source.id=${sourceId}&source.url=${sourceUrl}&source.placement=${this.sourcePlacement}&user.session=${userSession}`
+    }
+
     // Fetch recommendations from the API and return the list of recommendations
-    fetchRecommendations(retryCount = 2) {
-        return fetch(this.apiUrl)
+    fetchRecommendations(retryCount = 2, recCount = 6) {
+        return fetch(this.generateApiUrl(recCount))
         .then(response => response.json())
         .then(data => data.list)
         .catch(error => {
+            // Retry the request at least 2 times if it fails 
             if (retryCount > 0) {
                 console.warn(`Call failed trying again: ${retryCount}`);
-                return this.fetchRecommendations(retryCount - 1);
+                return this.fetchRecommendations(retryCount - 1, recCount);
             } else {
                 console.error('Error fetching recommendations:', error);
                 return [];
@@ -44,18 +54,20 @@ export default class Adwidget {
             video.muted = true;
             element.appendChild(video);
     }
+
     // create a recommendation image element to be displayed as part of the widget
     createRecommendationImageElement(element, recommendation) {
         const imgSrc = recommendation.thumbnail[0].url;
-        const fallbackSrc = './assets/images.png'; // Fallback image in case the image is not available
+        const defaultImg = './assets/images.png'; // use defaultImg image in case the image is not available
         const img = document.createElement('img');
         img.src = imgSrc;
         img.addEventListener('error', function() { // Handle image loading error when the image is not available
-            this.src = fallbackSrc;
+            this.src = defaultImg;
             this.alt = recommendation.branding || recommendation.name || 'image not available';
         });
         element.appendChild(img); // Add the image to the recommendation element
     }
+
     // Create a recommendation element to be displayed
     createRecommendationElement(recommendation) {
         const element = document.createElement('div');
@@ -74,6 +86,7 @@ export default class Adwidget {
             sourceDiv.textContent = recommendation.branding;
             contentDiv.appendChild(sourceDiv);
         }
+        // create sponsored tag if the recommendation is sponsored
         if (recommendation.origin === 'sponsored') {
             const sponsoredContainer = document.createElement('div');
             sponsoredContainer.className = 'sponsored-container';
@@ -83,6 +96,7 @@ export default class Adwidget {
             sponsoredContainer.appendChild(sponsoredSpan);
             contentDiv.appendChild(sponsoredContainer);
         }
+        // add generic ad tag to mark the card as a advertisement
         const adTag = document.createElement('div');
         adTag.className = 'ad-tag-container';
         const adTagSpan = document.createElement('span');
@@ -98,15 +112,15 @@ export default class Adwidget {
     }
     // Handle click on a recommendation
     handleClick(recommendation) {
-        if (recommendation.origin === 'sponsored') {
+        if (this.spaicelTags.includes(recommendation.origin)) { // check if we are dealing with a spaicelTag like sponsored
             window.open(recommendation.url, '_blank');
         } else {
             window.location.href = recommendation.url;
         }
     }
-    // render the widget by loading more recommendations (using async to be able to use await in the render method)
-    async render() {
-        await this.loadMore();
+    // render the widget by loading more recommendations
+    render() {
+        this.loadMore();
     }
     // Handle the intersection of the last recommendation with the viewport
     handleIntersect(entries) {
@@ -137,7 +151,7 @@ export default class Adwidget {
             // hide the loading indicator and change the loading state
             loadingIndicator.style.display = 'none';
             this.loading = false;
-            const lastElement = this.widgetContainer.children[this.widgetContainer.children.length - 2]; 
+            const lastElement = this.widgetContainer.children[this.widgetContainer.children.length - 2];
             // -2 Beacuse we want to get the last recommendtion and not the loading indicator
             
             if (lastElement) {
