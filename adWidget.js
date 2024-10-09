@@ -119,8 +119,8 @@ export default class Adwidget {
         }
     }
     // render the widget by loading more recommendations
-    render() {
-        this.loadMore();
+    async render() {
+        await this.loadMore();
     }
     // Handle the intersection of the last recommendation with the viewport
     handleIntersect(entries) {
